@@ -3,19 +3,20 @@
 #include <cstring>
 #include <algorithm>
 
-#define MAX_MEMBER_COUNT 10000
+#define MAX_MEMBER_COUNT 100000
 
 struct MemberInfo_t
 {
     int id;
-    char name[21];
-    char address[20];
+    char name[10];
+    char address[40];
+    char phoneNumber[16]; 
     uint8_t cardNum[5];
 };
 
 void MakeMembers()
 {
-    MemberInfo_t seoulTechMember;
+    MemberInfo_t seoulTechMember = {0,};
 
     srand(time(NULL));
 
@@ -28,22 +29,25 @@ void MakeMembers()
     {
         seoulTechMember.id = id;
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 9; i++)
         {
-            seoulTechMember.name[i] = rand() % 26 + 'a';
+            seoulTechMember.name[i] = rand() % 26 + 'a';    // random값이 0~25까지 
         }
-        seoulTechMember.name[20] = '\0';
+        seoulTechMember.name[9] = '\0';
 
-        sprintf(seoulTechMember.address, "%02ddong-%03dho", rand() % 100, rand() % 1000);
+        sprintf(seoulTechMember.address, "LotteTower %03ddong-%05dho", rand() % 100+1, rand() % 1000+1);
+
+        sprintf(seoulTechMember.phoneNumber, "010-%04d-%04d", rand() % 10000, rand() % 10000);
 
         for (int i = 0; i < 5; i++)
         {
             seoulTechMember.cardNum[i] = rand() % 0xff;
         }
-        fprintf(fpList, "%05d %s %s %03d-%03d-%03d-%03d-%03d\n",
+        fprintf(fpList, "%05d %s %s %s %03d-%03d-%03d-%03d-%03d\n",
                 seoulTechMember.id,
                 seoulTechMember.name,
                 seoulTechMember.address,
+                seoulTechMember.phoneNumber,
                 seoulTechMember.cardNum[0],
                 seoulTechMember.cardNum[1],
                 seoulTechMember.cardNum[2],
@@ -117,38 +121,38 @@ void ReadnSort()
 
 int main()
 {
-    //MakeMembers();
+    MakeMembers();
     //ReadnSort();
     //154-140-140-213-203
-    uint8_t card[5] = {154,140,140,213,203};
+    // uint8_t card[5] = {154,140,140,213,203};
 
-    MemberInfo_t tempMember;
-    std::vector<MemberInfo_t> vecMemList;
+    // MemberInfo_t tempMember;
+    // std::vector<MemberInfo_t> vecMemList;
 
-    FILE *fpReadMembers;
-    fpReadMembers = fopen("memberLists.bin", "r");
+    // FILE *fpReadMembers;
+    // fpReadMembers = fopen("memberLists.bin", "r");
     
-    while (fread(&tempMember, sizeof(MemberInfo_t), 1, fpReadMembers))
-    {
-        vecMemList.push_back(tempMember);
-    }
+    // while (fread(&tempMember, sizeof(MemberInfo_t), 1, fpReadMembers))
+    // {
+    //     vecMemList.push_back(tempMember);
+    // }
 
-    for (long unsigned int i=0; i<vecMemList.size(); i++) {
-        if (!memcmp(vecMemList[i].cardNum, card, sizeof(card))) {
-            printf("%05d %s %s %03d-%03d-%03d-%03d-%03d\n",
-                vecMemList[i].id,
-                vecMemList[i].name,
-                vecMemList[i].address,
-                vecMemList[i].cardNum[0],
-                vecMemList[i].cardNum[1],
-                vecMemList[i].cardNum[2],
-                vecMemList[i].cardNum[3],
-                vecMemList[i].cardNum[4]);
-        }
-    }
+    // for (long unsigned int i=0; i<vecMemList.size(); i++) {
+    //     if (!memcmp(vecMemList[i].cardNum, card, sizeof(card))) {
+    //         printf("%05d %s %s %03d-%03d-%03d-%03d-%03d\n",
+    //             vecMemList[i].id,
+    //             vecMemList[i].name,
+    //             vecMemList[i].address,
+    //             vecMemList[i].cardNum[0],
+    //             vecMemList[i].cardNum[1],
+    //             vecMemList[i].cardNum[2],
+    //             vecMemList[i].cardNum[3],
+    //             vecMemList[i].cardNum[4]);
+    //     }
+    // }
 
 
-    fclose(fpReadMembers);
+    // fclose(fpReadMembers);
 
     return 0;
 }
